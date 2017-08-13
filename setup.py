@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='django-mg',
-    version='0.0.1',
+    version='0.0.2',
     author = "Matthys Kroon",
     author_email = "matthysk@gmail.com",
     description='Django app for keeping track of things in the garden.',

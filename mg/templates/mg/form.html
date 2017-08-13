@@ -2,6 +2,10 @@
 
 {% load bootstrap3 %}
 
+{% block app_head %}
+	{{ form.media }}
+{% endblock %}
+
 {% block mg_content %}
 	<h1>{{heading}}</h1>
 	<form action="" method="POST"{% if has_files %} enctype="multipart/form-data"{% endif %}>
