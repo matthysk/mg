@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block app_head %}
+{% endblock %}
+
+{% block app_menu %}
+	<div class="navbar-header navbar-inverse">
+		<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+			<span class="sr-only">Toggle navigation</span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+		</button>
+		<a class="navbar-brand" href="#">My garden</a>
+	</div>
+	<div class="collapse navbar-collapse">
+		<ul class="nav navbar-nav">
+			<li><a href="{% url 'mg-list' 'plantinglocation' %}">Planting Locations</a></li>
+			<li><a href="{% url 'mg-list' 'seedbatch' %}">Seeds</a></li>
+			<li><a href="{% url 'mg-list' 'planting' %}">Plantings</a></li>
+			<li><a href="{% url 'mg-list' 'transplant' %}">Transplant</a></li>
+			<li><a href="{% url 'mg-list' 'variety' %}">Variety</a></li>
+		</ul>
+	</div>
+{% endblock %}
+
+{% block main_content %}
+	<div class='container'>
+		{% block mg_content %}
+			My garden
+		{% endblock %}
+	</div>
+{% endblock %}

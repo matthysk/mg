@@ -1,0 +1,26 @@
+{% extends "mg/index.html" %}
+
+{% block mg_content %}
+
+	<h1>{{item.class_display}}: {{item}}</h1>
+
+	<p>
+	<a class="btn btn-success" href="{% url 'mg-add-photo' model_name=item.model_name pk=item.pk %}"><span class="glyphicon glyphicon-plus"></span>Photo</a>
+	</p>
+
+	{% for name, value in item.field_pairs %}
+		<p>
+			<b>{{name}}</b> {{value}}
+		</p>
+	{% endfor %}
+
+	{% if item.photos %}
+		{% for photo in item.photos.all %}
+			<div>
+				{{photo}}
+				<img src="{{photo.photo.url}}"/>
+			</div>
+		{% endfor %}
+	{% endif %}
+
+{% endblock %}

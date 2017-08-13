@@ -1,0 +1,13 @@
+{% extends "mg/index.html" %}
+
+{% block mg_content %}
+	<h1>{{heading}}</h1>
+	<p>
+		<a class='btn btn-success' href="{% url 'mg-create' model_name %}">+ Add</a>
+	</p>
+	<ul>
+		{% for item in items %}
+			<li><a href="{{item.get_absolute_url}}">{{item}}</a></li>
+		{% endfor %}
+	</ul>
+{% endblock %}

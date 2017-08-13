@@ -1,0 +1,123 @@
+{% extends "mg/index.html" %}
+
+{% block mg_content %}
+	<h1>Adding a photo to {{item}}</h1>
+		
+	<form action="" method="POST"{% if has_files %} enctype="multipart/form-data"{% endif %}>
+		{% csrf_token %}
+		
+		<p class='info'>Tap/click to capture image</p>
+
+		<p>
+			<button type='button' onclick="go_back();" class='btn btn-info'>Done</button>
+			<button type='button' onclick="send_photo();" class='btn btn-success image-action'>+ Save</button>
+			<button class='btn btn-warning image-action' onclick="camInit();">Trash</button>
+		</p>
+		<canvas  id="myCanvas" width="600" height="400"></canvas>
+		<video onclick="snapshot();" width=600 height=400 id="video" controls autoplay></video>
+	</form>
+
+	<script>
+	//--------------------
+	// GET USER MEDIA CODE
+	//--------------------
+
+		$(document).ready(function(){camInit()});
+
+		navigator.getUserMedia = ( navigator.getUserMedia ||
+			navigator.webkitGetUserMedia ||
+			navigator.mozGetUserMedia ||
+			navigator.msGetUserMedia);
+
+		var video;
+		var webcamStream;
+		var canvas, ctx;
+		var cameraState;
+		var controlButtons;
+		
+		function startWebcam() {
+			$(video).show();
+			$(canvas).hide();
+			controlButtons.hide();
+			cameraState = 'video';
+			if (navigator.getUserMedia) {
+				navigator.getUserMedia (
+
+					// constraints
+					{
+						video: true,
+						audio: false
+					},
+
+					// successCallback
+					function(localMediaStream) {
+						video.src = window.URL.createObjectURL(localMediaStream);
+						webcamStream = localMediaStream;
+					},
+
+					// errorCallback
+					function(err) {
+						console.log("The following error occured: " + err);
+					}
+				);
+			} else {
+				console.log("getUserMedia not supported");
+			}
+		}
+
+		function stopWebcam() {
+			var tracks = webcamStream.getTracks();
+			tracks.forEach(function(track){track.stop()});
+		}
+		//---------------------
+		// TAKE A SNAPSHOT CODE
+		//---------------------
+
+		function camInit() {
+			// Get the canvas and obtain a context for
+			// drawing in it
+			canvas = document.getElementById("myCanvas");
+			ctx = canvas.getContext('2d');
+			video = document.querySelector('video');
+			controlButtons = $('button.image-action');
+			startWebcam();
+		}
+
+		function snapshot() {
+			$(canvas).show();
+			$(video).hide();
+			controlButtons.show();
+			// Draws current image from the video element into the canvas
+			ctx.drawImage(video, 0,0, canvas.width, canvas.height);
+			stopWebcam();
+			cameraState = 'image';
+		}
+
+		function send_photo(){
+			console.log('Sending photo!');
+			console.log(cameraState);
+			var data = {csrfmiddlewaretoken: '{{ csrf_token }}', imageData: canvas.toDataURL("image/png")};
+			$.post('#', 
+				data, 
+				function(data)
+				{
+					console.log(data)
+					if (data.result == 'success')
+					{
+						startWebcam();
+					}
+					else
+					{
+						alert('Error occured, did not save');
+					}
+				}
+			);
+		}
+
+		function go_back()
+		{
+			window.location = "{{item.get_absolute_url}}";
+		}
+
+	</script>
+{% endblock %}
