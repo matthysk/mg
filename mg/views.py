@@ -42,7 +42,20 @@ def list_view(request, model_name):
 def detail_view(request, model_name, pk):
     ModelClass = apps.get_model(app_label='mg', model_name=model_name)
     item = ModelClass.objects.get(pk=pk)
-    return render(request, 'mg/detail.html', {'item': item})
+    if request.method == 'POST':
+        photoForm = mgforms.PhotoForm(request.POST, request.FILES)
+        if photoForm.is_valid():
+            photo = photoForm.save(commit=False)
+            photo.dateCreated = datetime.datetime.now(pytz.timezone('Africa/Johannesburg'))
+            photo.content_object = item
+            photo.save()
+            print('Photo saved')
+            return redirect(item)
+        else:
+            print('Error in form')
+    else:
+        photoForm = mgforms.PhotoForm()
+    return render(request, 'mg/detail.html', {'item': item, 'photoForm': photoForm})
 
 import base64
 from django.core.files.base import ContentFile

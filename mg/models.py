@@ -27,7 +27,7 @@ class MGMixin(object):
         return reverse('mg-detail', kwargs={'pk': self.pk, 'model_name': self._meta.model_name})
 
     def field_pairs(self):
-        return [ (f.name, getattr(self, f.name),) for f in self._meta.fields ]
+        return [ (f.name, getattr(self, f.name),) for f in self._meta.fields if f.name != 'id' ]
 
     def class_display(self):
         return self._meta.verbose_name

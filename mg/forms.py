@@ -35,3 +35,9 @@ class NewPlantingForm(forms.ModelForm):
         widgets = {
                 'plantedTime': DateTimeWidget(options=dateTimeOptions, bootstrap_version=3)
             }
+
+class PhotoForm(forms.ModelForm):
+    class Meta:
+        model = mgmodels.Photo
+        fields = ('photo',)
+

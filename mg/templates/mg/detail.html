@@ -5,7 +5,12 @@
 	<h1>{{item.class_display}}: {{item}}</h1>
 
 	<p>
-	<a class="btn btn-success" href="{% url 'mg-add-photo' model_name=item.model_name pk=item.pk %}"><span class="glyphicon glyphicon-plus"></span>Photo</a>
+		<form action="#" method="POST" enctype="multipart/form-data">
+			{% csrf_token %}
+			{{ photoForm.photo }}
+			<input type="submit" class="btn btn-success" value="Upload photo"></input>
+		</form>
+		<a class="btn btn-success" href="{% url 'mg-add-photo' model_name=item.model_name pk=item.pk %}"><span class="glyphicon glyphicon-plus"></span>Photo from webcam</a>
 	</p>
 
 	{% for name, value in item.field_pairs %}
